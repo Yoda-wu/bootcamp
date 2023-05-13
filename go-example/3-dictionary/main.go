@@ -36,7 +36,7 @@ type DictResponse struct {
 	} `json:"dictionary"`
 }
 
-func query(word string) {
+func query(word string, ch chan DictResponse) {
 	client := &http.Client{}
 	request := DictReqeust{
 		TransTyep: "en2zh",
@@ -90,7 +90,8 @@ func query(word string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("%#v\n", response)
+	log.Printf("%#v\n", response)
+	ch <- response
 }
 
 func main() {
@@ -99,5 +100,5 @@ func main() {
 		os.Exit(1)
 	}
 	word := os.Args[1]
-	query(word)
+	query(word, nil)
 }
